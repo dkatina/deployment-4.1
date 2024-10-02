@@ -1,4 +1,4 @@
-from flask import request, jsonify
+from flask import request, jsonify, session
 from app.blueprints.members import members_bp
 from app.blueprints.members.schemas import member_schema, members_schema
 from marshmallow import ValidationError
@@ -50,8 +50,9 @@ def update_member(member_id):
 
 @members_bp.route("/<int:member_id>", methods=['DELETE'])
 def delete_member(member_id):
-    query = delete(Member).where(Member.id == member_id)
-    member = db.session.execute(query)
+    query = select(Member).where(Member.id == member_id)
+    member = db.session.execute(query).scalars().first()
 
+    db.session.delete(member)
     db.session.commit()
     return jsonify({"message": f"succesfully deleted user {member_id}"})
