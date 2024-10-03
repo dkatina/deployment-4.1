@@ -4,10 +4,12 @@ from app.blueprints.members.schemas import member_schema, members_schema
 from marshmallow import ValidationError
 from app.models import Member, db
 from sqlalchemy import select, delete
+from app.extensions import limiter
 
 
 
 @members_bp.route("/", methods=['POST'])
+@limiter.limit("3 per hour")
 def create_member():
     try: 
         member_data = member_schema.load(request.json)

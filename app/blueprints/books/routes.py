@@ -5,6 +5,7 @@ from app.models import db
 from app.models import Book
 from sqlalchemy import select, delete
 from marshmallow import ValidationError
+from app.extensions import cache
 
 @books_bp.route("/", methods=['POST'])
 def create_book():
@@ -22,6 +23,7 @@ def create_book():
 
 
 @books_bp.route("/", methods=['GET'])
+@cache.cached(timeout=60)
 def get_books():
     query = select(Book)
     result = db.session.execute(query).scalars().all()

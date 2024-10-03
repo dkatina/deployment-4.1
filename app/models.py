@@ -24,7 +24,7 @@ class Member(Base):
     email: Mapped[str] = mapped_column(db.String(150), unique=True, nullable=False)
     DOB: Mapped[date] = mapped_column(nullable=False)
 
-    loans: Mapped[List["Loan"]] = db.relationship(back_populates="member" , cascade="all, delete") #When we delete a Memeber we remove the records of their loans
+    loans: Mapped[List["Loan"]] = db.relationship(back_populates="member", cascade="all, delete") #When we delete a Memeber we remove the records of their loans
 
 class Loan(Base):
     __tablename__ = "loans"

@@ -46,5 +46,8 @@ def delete_loan(loan_id):
     db.session.delete(loan)
     db.session.commit()
     return jsonify({"message": f"succesfully deleted loan {loan_id}"})
+
+
+
     
 
