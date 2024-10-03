@@ -23,6 +23,7 @@ class Member(Base):
     name: Mapped[str] = mapped_column(db.String(100), nullable=False)
     email: Mapped[str] = mapped_column(db.String(150), unique=True, nullable=False)
     DOB: Mapped[date] = mapped_column(nullable=False)
+    password: Mapped[str] = mapped_column(db.String(100), nullable=False)
 
     loans: Mapped[List["Loan"]] = db.relationship(back_populates="member", cascade="all, delete") #When we delete a Memeber we remove the records of their loans
 
