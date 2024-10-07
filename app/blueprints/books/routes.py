@@ -1,3 +1,4 @@
+from pydoc import pager
 from flask import jsonify, request
 from . import books_bp
 from .schemas import book_schema, books_schema
@@ -23,11 +24,18 @@ def create_book():
 
 
 @books_bp.route("/", methods=['GET'])
-@cache.cached(timeout=60)
+# @cache.cached(timeout=60)
 def get_books():
-    query = select(Book)
-    books = db.session.execute(query).scalars().all() 
-    return books_schema.jsonify(books), 200
+    try:
+        page = int(request.args.get('page'))
+        per_page = int(request.args.get('per_page'))
+        query = select(Book)
+        books = db.paginate(query, page=page, per_page=per_page)
+        return books_schema.jsonify(books), 200
+    except:
+        query = select(Book)
+        books = db.session.execute(query).scalars().all() 
+        return books_schema.jsonify(books), 200  
 
 
 @books_bp.route("/<int:book_id>", methods=["PUT"])
