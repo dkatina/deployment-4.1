@@ -25,8 +25,7 @@ def create_book():
 @books_bp.route("/", methods=['GET'])
 @cache.cached(timeout=60)
 def get_books():
-    query = select(Book)
-    result = db.session.execute(query).scalars().all()
+    result = Book.query.all()
     return books_schema.jsonify(result), 200
 
 
@@ -58,3 +57,12 @@ def delete_book(book_id):
     db.session.commit()
     return jsonify({"message": f"succesfully deleted user {book_id}"})
     
+
+@books_bp.route("/popular", methods=['GET'])
+def popular_books():
+    query = select(Book)
+    books = db.session.execute(query).scalars().all()
+
+    books.sort(key= lambda book: len(book.loans), reverse=True)
+
+    return books_schema.jsonify(books)
