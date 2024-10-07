@@ -72,7 +72,7 @@ def popular_books():
 def search_book():
     title = request.args.get("title")
     
-    query = select(Book).where(Book.title.like(f'%{title}%'))
+    query = select(Book).where(Book.title.like(f'%{title}%')) # % - wildcard character meaning any number, of any character(s) can be hear
     books = db.session.execute(query).scalars().all()
 
     return books_schema.jsonify(books)
