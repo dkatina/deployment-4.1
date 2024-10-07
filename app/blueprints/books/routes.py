@@ -25,8 +25,9 @@ def create_book():
 @books_bp.route("/", methods=['GET'])
 @cache.cached(timeout=60)
 def get_books():
-    result = Book.query.all()
-    return books_schema.jsonify(result), 200
+    query = select(Book)
+    books = db.session.execute(query).scalars().all() 
+    return books_schema.jsonify(books), 200
 
 
 @books_bp.route("/<int:book_id>", methods=["PUT"])
@@ -64,5 +65,14 @@ def popular_books():
     books = db.session.execute(query).scalars().all()
 
     books.sort(key= lambda book: len(book.loans), reverse=True)
+
+    return books_schema.jsonify(books)
+
+@books_bp.route("/search", methods=['GET'])
+def search_book():
+    title = request.args.get("title")
+    
+    query = select(Book).where(Book.title.like(f'%{title}%'))
+    books = db.session.execute(query).scalars().all()
 
     return books_schema.jsonify(books)
