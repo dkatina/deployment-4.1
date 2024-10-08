@@ -4,6 +4,8 @@ from app.extensions import ma, limiter, cache
 from app.blueprints.members import members_bp
 from app.blueprints.books import books_bp
 from app.blueprints.loans import loan_bp
+from app.blueprints.items import items_bp
+from app.blueprints.orders import orders_bp
 
 
 def create_app(config_name):
@@ -21,6 +23,8 @@ def create_app(config_name):
     app.register_blueprint(members_bp, url_prefix='/members')
     app.register_blueprint(books_bp, url_prefix="/books")
     app.register_blueprint(loan_bp, url_prefix="/loans")
+    app.register_blueprint(items_bp, url_prefix="/items")
+    app.register_blueprint(orders_bp, url_prefix="/orders")
 
     return app
 
