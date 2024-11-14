@@ -32,7 +32,7 @@ def login():
 
         return jsonify(response), 200
     else:
-        return jsonify({"message": "Invalid email or password!"})
+        return jsonify({"message": "Invalid email or password!"}), 400
 
 
 @members_bp.route("/", methods=['POST'])
@@ -41,6 +41,7 @@ def create_member():
     try: 
         member_data = member_schema.load(request.json)
     except ValidationError as e:
+        print(e.messages)
         return jsonify(e.messages), 400
     
     new_member = Member(name=member_data['name'], email=member_data['email'], DOB=member_data['DOB'], password=member_data['password'])

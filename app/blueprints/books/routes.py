@@ -22,7 +22,7 @@ def create_book():
 
     return book_schema.jsonify(new_book), 201
 
-
+#PAGINATION!
 @books_bp.route("/", methods=['GET'])
 # @cache.cached(timeout=60)
 def get_books():
@@ -66,7 +66,7 @@ def delete_book(book_id):
     db.session.commit()
     return jsonify({"message": f"succesfully deleted user {book_id}"})
     
-
+#MOST POPULAR BOOKS
 @books_bp.route("/popular", methods=['GET'])
 def popular_books():
     query = select(Book)
@@ -76,6 +76,7 @@ def popular_books():
 
     return books_schema.jsonify(books)
 
+#QUERY PARAMETER ROUTE
 @books_bp.route("/search", methods=['GET'])
 def search_book():
     title = request.args.get("title")
